@@ -1,7 +1,7 @@
 # Keywords to search for
 
 - [trend following](https://en.wikipedia.org/wiki/Trend_following>)  
-  Вероятно, наиболее подходящий термин
+  Это скорее про настоящее, чем про будущее.
 - trend following indicator
 - trend filter
 - time series momentum
