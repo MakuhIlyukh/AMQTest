@@ -43,11 +43,11 @@
 # Math Frameworks
 
 - Hidden Markov Model
-- Kalman Filter (baseline solution or not?)
+- Kalman Filter (baseline solution or not?)  
   иногда это частный случай hidden markov model
 - Partially observable Markov decision process
   для Reinforcement Learning
-- Dynamic Bayesian Network
+- Dynamic Bayesian Network  
   generalization of hidden markov models and kalman filter
 
 # Tips, hacks and ideas
