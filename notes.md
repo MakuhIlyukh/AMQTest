@@ -11,6 +11,7 @@
 - short and long prediction
 - market regime prediction / detection  
   (regime - это скорее про кризисы и законы, чем про тренды)
+- regime shift
 
 # Questions and Answers
 
@@ -22,7 +23,8 @@
   - Q: Вероятно, бизнес от нас потребует не тригериться на слабый(по углу наклона?) тренд. Как заставить hmm предиктить сильные тренды?
 - Q: Нужно ли и как учитывать влияние **НАШЕЙ** покупки или продажи на цену?
 - Q: Мы имеем дело с momentum trading или c trend following?  
-  A: <https://www.quora.com/Is-trend-following-and-momentum-trading-the-same-thing/answer/Scott-Phillips-55>
+  A: <https://www.quora.com/Is-trend-following-and-momentum-trading-the-same-thing/answer/Scott-Phillips-55>  
+     Возможно мы имеем дело с чем-то другим. Я пока не уверен, что trend following - это про будущее, а не про настоящее.
 - Q: Чем отличается filter от indicator?
 - Q: Мы имеем дело с stock или futures?
 - Q: Насколько силен импакт других алготрейдеров, не вызывает ли какой-либо алгоритм лавинообразный эффект? 
@@ -30,6 +32,7 @@
 - Q: Kalman vs HMM. What is the difference?  
   A: В некоторых частных случаях, kalman и hmm -- это одно и тоже.  
      <https://stats.stackexchange.com/questions/183118/difference-between-hidden-markov-models-and-particle-filter-and-kalman-filter>
+- Q: Как быть с трендами внутри трендов?
 
 # Prog Frameworks
 
@@ -45,7 +48,7 @@
 - Hidden Markov Model
 - Kalman Filter (baseline solution or not?)  
   иногда это частный случай hidden markov model
-- Partially observable Markov decision process
+- Partially observable Markov decision process  
   для Reinforcement Learning
 - Dynamic Bayesian Network  
   generalization of hidden markov models and kalman filter
@@ -59,9 +62,32 @@
 - Ensembling
 - Скомбинировать модель обученную на конкретном ряде с моделью обученной на многих рядах
 
-
 # Literature
 
+## LSTM + HMM
+
+<https://arxiv.org/pdf/2104.09700.pdf>
+
+### Что сделали
+
+1. Разметка с использованием метода tripple barier(нужна для выбора фактора);
+2. Из большого числа различных факторов выбрали наилучшие,
+   обучив на них gmm-hmm и используя метки из прошлого пункта <https://arxiv.org/pdf/2104.09700.pdf#table.caption.5>;
+3. Обучили на модели из предыдущего пункта xgb-hmm;
+4. Прогнали модели из предыдущего пункта на нескольких факторах и выход пустили в lstm;
+
+### Advantages
+
+- многомерность: можно обучить на нескольких временных рядах (факторах) одновременно;
+- реакция на изменение не только тренда, но и волатильности;
+- в зависимости от препроцессинга может научиться детектить и предиктить не только тренды;
+- позволяет отранжировать факторы по степени полезности;
+
+### Disadvantages
+
+- БЕЗ LSTM наблюдается некоторый лаг (после посещения локального максимума, все еще не меняет состояние). Вероятно, причина этому - марковость hmm. Именно поэтому и добавляется LSTM.
+- Зависит от выбора факторов, но которых обучается. То бишь, препроцессинг играет большую роль.
+- Зависит от выбора likelihood-распределений;
 
 # URLs
 
